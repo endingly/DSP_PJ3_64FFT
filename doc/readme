@@ -1,0 +1,7 @@
+1. Input data serially, and do reordering while inputting. This takes 64 clks. Which means I should finish a 64-FFT in 64 clks. 
+2. Or input data parallelly. Should ask prof.Zeng.
+
+module division: fft_top, fft_core2, fft_fetch_data, fft_fetch_wn.
+
+If serially input data, should I use asynchronous colck(divided by 64) or clk with done signal?
+
