@@ -104,7 +104,7 @@ always @ (posedge clk or negedge rst_n) begin
                                     get_data_im_buf[ 7], get_data_im_buf[ 6], get_data_im_buf[ 5], get_data_im_buf[ 4],
                                     get_data_im_buf[ 3], get_data_im_buf[ 2], get_data_im_buf[ 1], get_data_im_buf[ 0] };
                 */
-                /*
+                
                 in_data_re_buf <= { fft_data_re_i      , get_data_re_buf[30], get_data_re_buf[29], get_data_re_buf[28],
                                     get_data_re_buf[27], get_data_re_buf[26], get_data_re_buf[25], get_data_re_buf[24],
                                     get_data_re_buf[23], get_data_re_buf[22], get_data_re_buf[21], get_data_re_buf[20],
@@ -122,7 +122,7 @@ always @ (posedge clk or negedge rst_n) begin
                                     get_data_im_buf[11], get_data_im_buf[10], get_data_im_buf[ 9], get_data_im_buf[ 8],
                                     get_data_im_buf[ 7], get_data_im_buf[ 6], get_data_im_buf[ 5], get_data_im_buf[ 4],
                                     get_data_im_buf[ 3], get_data_im_buf[ 2], get_data_im_buf[ 1], get_data_im_buf[ 0] };
-                */
+                /*
                 in_data_re_buf <= { fft_data_re_i      , get_data_re_buf[14], get_data_re_buf[13], get_data_re_buf[12],
                                     get_data_re_buf[11], get_data_re_buf[10], get_data_re_buf[ 9], get_data_re_buf[ 8],
                                     get_data_re_buf[ 7], get_data_re_buf[ 6], get_data_re_buf[ 5], get_data_re_buf[ 4],
@@ -132,6 +132,7 @@ always @ (posedge clk or negedge rst_n) begin
                                     get_data_im_buf[11], get_data_im_buf[10], get_data_im_buf[ 9], get_data_im_buf[ 8],
                                     get_data_im_buf[ 7], get_data_im_buf[ 6], get_data_im_buf[ 5], get_data_im_buf[ 4],
                                     get_data_im_buf[ 3], get_data_im_buf[ 2], get_data_im_buf[ 1], get_data_im_buf[ 0] };
+                */
             end
             else begin
                 fft_i_cnt <= fft_i_cnt + 1;
