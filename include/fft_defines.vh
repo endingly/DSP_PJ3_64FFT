@@ -7,8 +7,14 @@
 // `define     FFT_LEN     64
 // `define     LOG2_FFT_LEN 6
 
-`define     FFT_LEN     8
-`define     LOG2_FFT_LEN 3
+// `define     FFT_LEN     8
+// `define     LOG2_FFT_LEN 3
+
+// `define     FFT_LEN     16
+// `define     LOG2_FFT_LEN 4
+
+`define     FFT_LEN     32
+`define     LOG2_FFT_LEN 5
 
 `define     STG_WID     4
 

@@ -7,6 +7,8 @@
     //
 //------------------------------------------------------------------------------
 
+`include "../include/fft_defines.vh"
+
 module fft_gen_wn(
     stage_i,
 
@@ -20,12 +22,12 @@ module fft_gen_wn(
 //*** INPUT/OUTPUT *************************************************************
 input  [`STG_WID -1 : 0] stage_i;
 
-output reg [`FFT_LEN/2*`WN_WID -1 : 0] fft_wn_re_o;
-output reg [`FFT_LEN/2*`WN_WID -1 : 0] fft_wn_im_o;
+output reg [`WN_LEN*`WN_WID -1 : 0] fft_wn_re_o;
+output reg [`WN_LEN*`WN_WID -1 : 0] fft_wn_im_o;
 
 //*** WIRE/REG *****************************************************************
-// reg [`WN_WID -1 : 0] wn_re_r [0:`FFT_LEN/2];
-// reg [`WN_WID -1 : 0] wn_im_r [0:`FFT_LEN/2];
+// reg [`WN_WID -1 : 0] wn_re_r [0:`WN_LEN];
+// reg [`WN_WID -1 : 0] wn_im_r [0:`WN_LEN];
 
 
 //*** MAIN BODY ****************************************************************
@@ -34,31 +36,181 @@ always @(stage_i) begin
     fft_wn_im_o = 'd0;
     case(stage_i)
         'd0: begin
-            fft_wn_re_o = {`FFT_LEN/2{`WN_WID'd256}};
-            fft_wn_im_o = {`FFT_LEN/2{`WN_WID'd0}};
+            fft_wn_re_o[ `WN_WID -1   :         0] = 'd256;
+            fft_wn_re_o[ 2*`WN_WID -1 :   `WN_WID] = 'd256;
+            fft_wn_re_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd256;
+            fft_wn_re_o[ 4*`WN_WID -1 : 3*`WN_WID] = 'd256;
+            fft_wn_re_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd256;
+            fft_wn_re_o[ 6*`WN_WID -1 : 5*`WN_WID] = 'd256;
+            fft_wn_re_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd256;
+            fft_wn_re_o[ 8*`WN_WID -1 : 7*`WN_WID] = 'd256;
+            fft_wn_re_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd256;
+            fft_wn_re_o[10*`WN_WID -1 : 9*`WN_WID] = 'd256;
+            fft_wn_re_o[11*`WN_WID -1 :10*`WN_WID] = 'd256;
+            fft_wn_re_o[12*`WN_WID -1 :11*`WN_WID] = 'd256;
+            fft_wn_re_o[13*`WN_WID -1 :12*`WN_WID] = 'd256;
+            fft_wn_re_o[14*`WN_WID -1 :13*`WN_WID] = 'd256;
+            fft_wn_re_o[15*`WN_WID -1 :14*`WN_WID] = 'd256;
+            fft_wn_re_o[16*`WN_WID -1 :15*`WN_WID] = 'd256;
+
+            fft_wn_im_o[ `WN_WID -1   :         0] = 'd0;
+            fft_wn_im_o[ 2*`WN_WID -1 :   `WN_WID] = 'd0;
+            fft_wn_im_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd0;
+            fft_wn_im_o[ 4*`WN_WID -1 : 3*`WN_WID] = 'd0;
+            fft_wn_im_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd0;
+            fft_wn_im_o[ 6*`WN_WID -1 : 5*`WN_WID] = 'd0;
+            fft_wn_im_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd0;
+            fft_wn_im_o[ 8*`WN_WID -1 : 7*`WN_WID] = 'd0;
+            fft_wn_im_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd0;
+            fft_wn_im_o[10*`WN_WID -1 : 9*`WN_WID] = 'd0;
+            fft_wn_im_o[11*`WN_WID -1 :10*`WN_WID] = 'd0;
+            fft_wn_im_o[12*`WN_WID -1 :11*`WN_WID] = 'd0;
+            fft_wn_im_o[13*`WN_WID -1 :12*`WN_WID] = 'd0;
+            fft_wn_im_o[14*`WN_WID -1 :13*`WN_WID] = 'd0;
+            fft_wn_im_o[15*`WN_WID -1 :14*`WN_WID] = 'd0;
+            fft_wn_im_o[16*`WN_WID -1 :15*`WN_WID] = 'd0;
         end
         'd1: begin
-            fft_wn_re_o[`WN_WID -1   :         0] = 'd256;
-            fft_wn_re_o[2*`WN_WID -1 :   `WN_WID] = 'd0;
-            fft_wn_re_o[3*`WN_WID -1 : 2*`WN_WID] = 'd256;
-            fft_wn_re_o[4*`WN_WID -1 : 3*`WN_WID] = 'd0;
-            fft_wn_im_o[`WN_WID -1   :         0] = 'd0;
-            fft_wn_im_o[2*`WN_WID -1 :   `WN_WID] = -'d256; //'h200;
-            fft_wn_im_o[3*`WN_WID -1 : 2*`WN_WID] = 'd0;
-            fft_wn_im_o[4*`WN_WID -1 : 3*`WN_WID] = -'d256;
+            fft_wn_re_o[ `WN_WID -1   :         0] = 'd256;
+            fft_wn_re_o[ 2*`WN_WID -1 :   `WN_WID] = 'd0;
+            fft_wn_re_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd256;
+            fft_wn_re_o[ 4*`WN_WID -1 : 3*`WN_WID] = 'd0;
+            fft_wn_re_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd256;
+            fft_wn_re_o[ 6*`WN_WID -1 : 5*`WN_WID] = 'd0;
+            fft_wn_re_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd256;
+            fft_wn_re_o[ 8*`WN_WID -1 : 7*`WN_WID] = 'd0;
+            fft_wn_re_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd256;
+            fft_wn_re_o[10*`WN_WID -1 : 9*`WN_WID] = 'd0;
+            fft_wn_re_o[11*`WN_WID -1 :10*`WN_WID] = 'd256;
+            fft_wn_re_o[12*`WN_WID -1 :11*`WN_WID] = 'd0;
+            fft_wn_re_o[13*`WN_WID -1 :12*`WN_WID] = 'd256;
+            fft_wn_re_o[14*`WN_WID -1 :13*`WN_WID] = 'd0;
+            fft_wn_re_o[15*`WN_WID -1 :14*`WN_WID] = 'd256;
+            fft_wn_re_o[16*`WN_WID -1 :15*`WN_WID] = 'd0;
+
+            fft_wn_im_o[ `WN_WID -1   :         0] = 'd0;
+            fft_wn_im_o[ 2*`WN_WID -1 :   `WN_WID] = -'d256; //'h200;
+            fft_wn_im_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd0;
+            fft_wn_im_o[ 4*`WN_WID -1 : 3*`WN_WID] = -'d256;
+            fft_wn_im_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd0;
+            fft_wn_im_o[ 6*`WN_WID -1 : 5*`WN_WID] = -'d256;
+            fft_wn_im_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd0;
+            fft_wn_im_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d256;
+            fft_wn_im_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd0;
+            fft_wn_im_o[10*`WN_WID -1 : 9*`WN_WID] = -'d256;
+            fft_wn_im_o[11*`WN_WID -1 :10*`WN_WID] = 'd0;
+            fft_wn_im_o[12*`WN_WID -1 :11*`WN_WID] = -'d256;
+            fft_wn_im_o[13*`WN_WID -1 :12*`WN_WID] = 'd0;
+            fft_wn_im_o[14*`WN_WID -1 :13*`WN_WID] = -'d256;
+            fft_wn_im_o[15*`WN_WID -1 :14*`WN_WID] = 'd0;
+            fft_wn_im_o[16*`WN_WID -1 :15*`WN_WID] = -'d256;
+
         end
         'd2: begin
-            fft_wn_re_o[`WN_WID -1   :         0] = 'd256;
-            fft_wn_re_o[2*`WN_WID -1 :   `WN_WID] = 'd181;
-            fft_wn_re_o[3*`WN_WID -1 : 2*`WN_WID] = 'd256;
-            fft_wn_re_o[4*`WN_WID -1 : 3*`WN_WID] = -'d181;
-            fft_wn_im_o[`WN_WID -1   :         0] = 'd0;
-            fft_wn_im_o[2*`WN_WID -1 :   `WN_WID] = -'d181;
-            fft_wn_im_o[3*`WN_WID -1 : 2*`WN_WID] = -'d256;
-            fft_wn_im_o[4*`WN_WID -1 : 3*`WN_WID] = -'d181;
+            fft_wn_re_o[ `WN_WID -1   :         0] = 'd256;
+            fft_wn_re_o[ 2*`WN_WID -1 :   `WN_WID] = 'd181;
+            fft_wn_re_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd0;
+            fft_wn_re_o[ 4*`WN_WID -1 : 3*`WN_WID] = -'d181;
+            fft_wn_re_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd256;
+            fft_wn_re_o[ 6*`WN_WID -1 : 5*`WN_WID] = 'd181;
+            fft_wn_re_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd0;
+            fft_wn_re_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d181;
+            fft_wn_re_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd256;
+            fft_wn_re_o[10*`WN_WID -1 : 9*`WN_WID] = 'd181;
+            fft_wn_re_o[11*`WN_WID -1 :10*`WN_WID] = 'd0;
+            fft_wn_re_o[12*`WN_WID -1 :11*`WN_WID] = -'d181;
+            fft_wn_re_o[13*`WN_WID -1 :12*`WN_WID] = 'd256;
+            fft_wn_re_o[14*`WN_WID -1 :13*`WN_WID] = 'd181;
+            fft_wn_re_o[15*`WN_WID -1 :14*`WN_WID] = 'd0;
+            fft_wn_re_o[16*`WN_WID -1 :15*`WN_WID] = -'d181;
+
+            fft_wn_im_o[ `WN_WID -1   :         0] = 'd0;
+            fft_wn_im_o[ 2*`WN_WID -1 :   `WN_WID] = -'d181;
+            fft_wn_im_o[ 3*`WN_WID -1 : 2*`WN_WID] = -'d256;
+            fft_wn_im_o[ 4*`WN_WID -1 : 3*`WN_WID] = -'d181;
+            fft_wn_im_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd0;
+            fft_wn_im_o[ 6*`WN_WID -1 : 5*`WN_WID] = -'d181;
+            fft_wn_im_o[ 7*`WN_WID -1 : 6*`WN_WID] = -'d256;
+            fft_wn_im_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d181;
+            fft_wn_im_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd0;
+            fft_wn_im_o[10*`WN_WID -1 : 9*`WN_WID] = -'d181;
+            fft_wn_im_o[11*`WN_WID -1 :10*`WN_WID] = -'d256;
+            fft_wn_im_o[12*`WN_WID -1 :11*`WN_WID] = -'d181;
+            fft_wn_im_o[13*`WN_WID -1 :12*`WN_WID] = 'd0;
+            fft_wn_im_o[14*`WN_WID -1 :13*`WN_WID] = -'d181;
+            fft_wn_im_o[15*`WN_WID -1 :14*`WN_WID] = -'d256;
+            fft_wn_im_o[16*`WN_WID -1 :15*`WN_WID] = -'d181;
         end
-        // 'd3:
-        // 'd4:
+        'd3: begin
+            fft_wn_re_o[ `WN_WID -1   :         0] = 'd256;
+            fft_wn_re_o[ 2*`WN_WID -1 :   `WN_WID] = 'd237;
+            fft_wn_re_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd181;
+            fft_wn_re_o[ 4*`WN_WID -1 : 3*`WN_WID] = 'd98;
+            fft_wn_re_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd0;
+            fft_wn_re_o[ 6*`WN_WID -1 : 5*`WN_WID] = -'d98;
+            fft_wn_re_o[ 7*`WN_WID -1 : 6*`WN_WID] = -'d181;
+            fft_wn_re_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d237;
+            fft_wn_re_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd256;
+            fft_wn_re_o[10*`WN_WID -1 : 9*`WN_WID] = 'd237;
+            fft_wn_re_o[11*`WN_WID -1 :10*`WN_WID] = 'd181;
+            fft_wn_re_o[12*`WN_WID -1 :11*`WN_WID] = 'd98;
+            fft_wn_re_o[13*`WN_WID -1 :12*`WN_WID] = 'd0;
+            fft_wn_re_o[14*`WN_WID -1 :13*`WN_WID] = -'d98;
+            fft_wn_re_o[15*`WN_WID -1 :14*`WN_WID] = -'d181;
+            fft_wn_re_o[16*`WN_WID -1 :15*`WN_WID] = -'d237;
+
+            fft_wn_im_o[ `WN_WID -1   :         0] = 'd0;
+            fft_wn_im_o[ 2*`WN_WID -1 :   `WN_WID] = -'d98;
+            fft_wn_im_o[ 3*`WN_WID -1 : 2*`WN_WID] = -'d181;
+            fft_wn_im_o[ 4*`WN_WID -1 : 3*`WN_WID] = -'d237;
+            fft_wn_im_o[ 5*`WN_WID -1 : 4*`WN_WID] = -'d256;
+            fft_wn_im_o[ 6*`WN_WID -1 : 5*`WN_WID] = -'d237;
+            fft_wn_im_o[ 7*`WN_WID -1 : 6*`WN_WID] = -'d181;
+            fft_wn_im_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d98;
+            fft_wn_im_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd0;
+            fft_wn_im_o[10*`WN_WID -1 : 9*`WN_WID] = -'d98;
+            fft_wn_im_o[11*`WN_WID -1 :10*`WN_WID] = -'d181
+            fft_wn_im_o[12*`WN_WID -1 :11*`WN_WID] = -'d237
+            fft_wn_im_o[13*`WN_WID -1 :12*`WN_WID] = -'d256
+            fft_wn_im_o[14*`WN_WID -1 :13*`WN_WID] = -'d237
+            fft_wn_im_o[15*`WN_WID -1 :14*`WN_WID] = -'d181
+            fft_wn_im_o[16*`WN_WID -1 :15*`WN_WID] = -'d98;
+        end
+        'd4: begin
+            fft_wn_re_o[ `WN_WID -1   :         0] = 'd256;
+            fft_wn_re_o[ 2*`WN_WID -1 :   `WN_WID] = 'd251;
+            fft_wn_re_o[ 3*`WN_WID -1 : 2*`WN_WID] = 'd237;
+            fft_wn_re_o[ 4*`WN_WID -1 : 3*`WN_WID] = 'd213;
+            fft_wn_re_o[ 5*`WN_WID -1 : 4*`WN_WID] = 'd181;
+            fft_wn_re_o[ 6*`WN_WID -1 : 5*`WN_WID] = 'd142;
+            fft_wn_re_o[ 7*`WN_WID -1 : 6*`WN_WID] = 'd98;
+            fft_wn_re_o[ 8*`WN_WID -1 : 7*`WN_WID] = 'd50;
+            fft_wn_re_o[ 9*`WN_WID -1 : 8*`WN_WID] = 'd0;
+            fft_wn_re_o[10*`WN_WID -1 : 9*`WN_WID] = -'d50;
+            fft_wn_re_o[11*`WN_WID -1 :10*`WN_WID] = -'d98;
+            fft_wn_re_o[12*`WN_WID -1 :11*`WN_WID] = -'d142;
+            fft_wn_re_o[13*`WN_WID -1 :12*`WN_WID] = -'d181;
+            fft_wn_re_o[14*`WN_WID -1 :13*`WN_WID] = -'d213;
+            fft_wn_re_o[15*`WN_WID -1 :14*`WN_WID] = -'d237;
+            fft_wn_re_o[16*`WN_WID -1 :15*`WN_WID] = -'d251;
+
+            fft_wn_im_o[ `WN_WID -1   :         0] = 'd0;
+            fft_wn_im_o[ 2*`WN_WID -1 :   `WN_WID] = -'d50;
+            fft_wn_im_o[ 3*`WN_WID -1 : 2*`WN_WID] = -'d98;
+            fft_wn_im_o[ 4*`WN_WID -1 : 3*`WN_WID] = -'d142;
+            fft_wn_im_o[ 5*`WN_WID -1 : 4*`WN_WID] = -'d181;
+            fft_wn_im_o[ 6*`WN_WID -1 : 5*`WN_WID] = -'d213;
+            fft_wn_im_o[ 7*`WN_WID -1 : 6*`WN_WID] = -'d237;
+            fft_wn_im_o[ 8*`WN_WID -1 : 7*`WN_WID] = -'d251;
+            fft_wn_im_o[ 9*`WN_WID -1 : 8*`WN_WID] = -'d256;
+            fft_wn_im_o[10*`WN_WID -1 : 9*`WN_WID] = -'d251;
+            fft_wn_im_o[11*`WN_WID -1 :10*`WN_WID] = -'d237;
+            fft_wn_im_o[12*`WN_WID -1 :11*`WN_WID] = -'d213;
+            fft_wn_im_o[13*`WN_WID -1 :12*`WN_WID] = -'d181;
+            fft_wn_im_o[14*`WN_WID -1 :13*`WN_WID] = -'d142;
+            fft_wn_im_o[15*`WN_WID -1 :14*`WN_WID] = -'d98;
+            fft_wn_im_o[16*`WN_WID -1 :15*`WN_WID] = -'d50;
+        end
         // 'd5:
         default: begin
             fft_wn_re_o = 'd0;

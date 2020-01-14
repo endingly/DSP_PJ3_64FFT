@@ -19,13 +19,14 @@
 
 //--- OTHER DEFINES --------------------
 `define     AUTO_CHECK      "on"
-`define     CHKI_FFT        "./tv/fft_data_in.dat"
+`define     CHKI_FFT_DATA   "./tv/fft_data_in.dat"
 `define     CHKI_FFT_REORD  "./tv/fft_data_reord.dat"
 `define     CHKI_FFT_ORD    "./tv/fft_ord.dat"
 `define     CHKI_WN         "./tv/fft_wn_64.dat"
 `define     CHKO_FFT        "./tv/fft_data_out.dat"
 
-`define     DMP_FFT_FILE    "./fft_rtl_tmp.dat"
+`define     DMP_FFT_TMP     "./fft_rtl_tmp.dat"
+`define     DMP_FFT_OUT     "./fft_rtl_out.dat"
 
 `define     DMP_SHM_FILE        "./simul_data/waveform.shm"
 `define     DMP_FSDB_FILE       "./simul_data/waveform.fsdb"
@@ -50,11 +51,19 @@ wire signed [`DATA_WID -1 : 0]    fft_data_re_o, fft_data_im_o;
 
 
 //*** WIRE/REG *****************************************************************
-wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_re_w = dut.fft_core64_u.fft_data_re_r;
-wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_im_w = dut.fft_core64_u.fft_data_im_r;
+wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_re_tmp_w = dut.fft_core64_u.fft_data_re_r;
+wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_im_tmp_w = dut.fft_core64_u.fft_data_im_r;
 
-reg signed [`DATA_WID -1 : 0] fft_re_mem [0:`FFT_LEN-1];
-reg signed [`DATA_WID -1 : 0] fft_im_mem [0:`FFT_LEN-1];
+wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_re_o_w = dut.fft_core64_u.fft_data_re_o;
+wire [`FFT_LEN*`DATA_WID -1 : 0]  fft_data_im_o_w = dut.fft_core64_u.fft_data_im_o;
+wire fft_done = dut.fft_done;
+
+reg signed [`DATA_WID -1 : 0] fft_re_tmp_mem [0:`FFT_LEN-1];
+reg signed [`DATA_WID -1 : 0] fft_im_tmp_mem [0:`FFT_LEN-1];
+
+reg signed [`DATA_WID -1 : 0] fft_re_o_mem [0:`FFT_LEN-1];
+reg signed [`DATA_WID -1 : 0] fft_im_o_mem [0:`FFT_LEN-1];
+
 
 //*** DUT **********************************************************************
 `DUT_TOP dut(
@@ -71,12 +80,21 @@ reg signed [`DATA_WID -1 : 0] fft_im_mem [0:`FFT_LEN-1];
 );
 
 //*** MAIN BODY ****************************************************************
-generate 
 genvar i;
-    for (i = 0; i < `FFT_LEN; i = i+1) begin
-        always @(fft_data_re_w or fft_data_im_w) begin
-            fft_re_mem[i] = fft_data_re_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
-            fft_im_mem[i] = fft_data_im_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
+generate 
+    for (i = 0; i < `FFT_LEN; i = i+1) begin:mid_result
+        always @(fft_data_re_tmp_w or fft_data_im_tmp_w) begin
+            fft_re_tmp_mem[i] = fft_data_re_tmp_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
+            fft_im_tmp_mem[i] = fft_data_im_tmp_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
+        end
+    end
+endgenerate
+
+generate 
+    for (i = 0; i < `FFT_LEN; i = i+1) begin:final_result
+        always @(fft_data_re_o_w or fft_data_im_o_w) begin
+            fft_re_o_mem[i] = fft_data_re_o_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
+            fft_im_o_mem[i] = fft_data_im_o_w[(i+1)*`DATA_WID -1 : i*`DATA_WID];
         end
     end
 endgenerate
@@ -100,6 +118,10 @@ initial begin
     #(4*`DUT_FULL_CLK)
     read_fft_i;
     @(posedge clk) val_i <= 0;
+    dump_fft_tmp;
+end
+
+initial begin
     dump_fft_o;
 end
 
@@ -113,9 +135,8 @@ integer fp_read;
 integer f;
 reg [`DATA_WID -1 : 0] fft_data_re_tmp;
 reg [`DATA_WID -1 : 0] fft_data_im_tmp;
-
 begin
-    fp_read = $fopen(`CHKI_FFT_REORD,"r");
+    fp_read = $fopen(`CHKI_FFT_DATA,"r");
     repeat(`FFT_LEN) begin
         @(posedge clk) 
         f = $fscanf(fp_read, "%d + %di\n", fft_data_re_tmp, fft_data_im_tmp);
@@ -126,22 +147,65 @@ begin
 end
 endtask
 
+
+task dump_fft_tmp;
+integer fp_dump;
+integer f;
+begin
+    fp_dump = $fopen(`DMP_FFT_TMP,"w");
+    while (1) begin
+        @(posedge clk);
+        $fdisplay( fp_dump, "%d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di",
+                   fft_re_tmp_mem[ 0], fft_im_tmp_mem[ 0], fft_re_tmp_mem[ 1], fft_im_tmp_mem[ 1], 
+                   fft_re_tmp_mem[ 2], fft_im_tmp_mem[ 2], fft_re_tmp_mem[ 3], fft_im_tmp_mem[ 3], 
+                   fft_re_tmp_mem[ 4], fft_im_tmp_mem[ 4], fft_re_tmp_mem[ 5], fft_im_tmp_mem[ 5], 
+                   fft_re_tmp_mem[ 6], fft_im_tmp_mem[ 6], fft_re_tmp_mem[ 7], fft_im_tmp_mem[ 7],
+                   fft_re_tmp_mem[ 8], fft_im_tmp_mem[ 8], fft_re_tmp_mem[ 9], fft_im_tmp_mem[ 9], 
+                   fft_re_tmp_mem[10], fft_im_tmp_mem[10], fft_re_tmp_mem[11], fft_im_tmp_mem[11], 
+                   fft_re_tmp_mem[12], fft_im_tmp_mem[12], fft_re_tmp_mem[13], fft_im_tmp_mem[13], 
+                   fft_re_tmp_mem[14], fft_im_tmp_mem[14], fft_re_tmp_mem[15], fft_im_tmp_mem[15],
+                   fft_re_tmp_mem[16], fft_im_tmp_mem[16], fft_re_tmp_mem[17], fft_im_tmp_mem[17], 
+                   fft_re_tmp_mem[18], fft_im_tmp_mem[18], fft_re_tmp_mem[19], fft_im_tmp_mem[19], 
+                   fft_re_tmp_mem[20], fft_im_tmp_mem[20], fft_re_tmp_mem[21], fft_im_tmp_mem[21], 
+                   fft_re_tmp_mem[22], fft_im_tmp_mem[22], fft_re_tmp_mem[23], fft_im_tmp_mem[23],
+                   fft_re_tmp_mem[24], fft_im_tmp_mem[24], fft_re_tmp_mem[25], fft_im_tmp_mem[25], 
+                   fft_re_tmp_mem[26], fft_im_tmp_mem[26], fft_re_tmp_mem[27], fft_im_tmp_mem[27], 
+                   fft_re_tmp_mem[28], fft_im_tmp_mem[28], fft_re_tmp_mem[29], fft_im_tmp_mem[29], 
+                   fft_re_tmp_mem[30], fft_im_tmp_mem[30], fft_re_tmp_mem[31], fft_im_tmp_mem[31]  );
+    end
+end
+endtask
+
+
 task dump_fft_o;
 integer fp_dump;
 integer f;
-
 begin
-    fp_dump = $fopen(`DMP_FFT_FILE,"w");
+    fp_dump = $fopen(`DMP_FFT_OUT,"w");
     while (1) begin
-        @(posedge clk);
-        $fdisplay( fp_dump, "%d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di",
-                        fft_re_mem[0], fft_im_mem[0], fft_re_mem[1], fft_im_mem[1], 
-                        fft_re_mem[2], fft_im_mem[2], fft_re_mem[3], fft_im_mem[3], 
-                        fft_re_mem[4], fft_im_mem[4], fft_re_mem[5], fft_im_mem[5], 
-                        fft_re_mem[6], fft_im_mem[6], fft_re_mem[7], fft_im_mem[7] );
+        @(posedge clk)
+        if(fft_done)begin
+            $fdisplay( fp_dump, "%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di",
+                       fft_re_o_mem[ 0], fft_im_o_mem[ 0], fft_re_o_mem[ 1], fft_im_o_mem[ 1], 
+                       fft_re_o_mem[ 2], fft_im_o_mem[ 2], fft_re_o_mem[ 3], fft_im_o_mem[ 3], 
+                       fft_re_o_mem[ 4], fft_im_o_mem[ 4], fft_re_o_mem[ 5], fft_im_o_mem[ 5], 
+                       fft_re_o_mem[ 6], fft_im_o_mem[ 6], fft_re_o_mem[ 7], fft_im_o_mem[ 7],
+                       fft_re_o_mem[ 8], fft_im_o_mem[ 8], fft_re_o_mem[ 9], fft_im_o_mem[ 9], 
+                       fft_re_o_mem[10], fft_im_o_mem[10], fft_re_o_mem[11], fft_im_o_mem[11], 
+                       fft_re_o_mem[12], fft_im_o_mem[12], fft_re_o_mem[13], fft_im_o_mem[13], 
+                       fft_re_o_mem[14], fft_im_o_mem[14], fft_re_o_mem[15], fft_im_o_mem[15],
+                       fft_re_o_mem[16], fft_im_o_mem[16], fft_re_o_mem[17], fft_im_o_mem[17], 
+                       fft_re_o_mem[18], fft_im_o_mem[18], fft_re_o_mem[19], fft_im_o_mem[19], 
+                       fft_re_o_mem[20], fft_im_o_mem[20], fft_re_o_mem[21], fft_im_o_mem[21],
+                       fft_re_o_mem[22], fft_im_o_mem[22], fft_re_o_mem[23], fft_im_o_mem[23], 
+                       fft_re_o_mem[24], fft_im_o_mem[24], fft_re_o_mem[25], fft_im_o_mem[25], 
+                       fft_re_o_mem[26], fft_im_o_mem[26], fft_re_o_mem[27], fft_im_o_mem[27],
+                       fft_re_o_mem[28], fft_im_o_mem[28], fft_re_o_mem[29], fft_im_o_mem[29], 
+                       fft_re_o_mem[30], fft_im_o_mem[30], fft_re_o_mem[31], fft_im_o_mem[31] );
+    
+        end
     end
 end
-
 endtask
 
 //*** AUTO CHECK ****************************************************************
