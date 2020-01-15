@@ -36,8 +36,8 @@ output signed [`DATA_WID -1 :0] fft_data_re1_o, fft_data_re2_o;
 output signed [`DATA_WID -1 :0] fft_data_im1_o, fft_data_im2_o;
 
 //*** WIRE/REG *****************************************************************
-wire signed [`DATA_WID + `WN_WID -1 :0] fft_re1_enl, fft_im1_enl;
-wire signed [`DATA_WID + `WN_WID -1 :0] fft_re2_enl, fft_im2_enl;
+wire signed [`DATA_WID + `WN_WID -1 :0] fft_re1_enl, fft_im1_enl; //enlarged data
+wire signed [`DATA_WID + `WN_WID -1 :0] fft_re2_enl, fft_im2_enl; //enlarged data
 
 reg signed  [`DATA_WID + `WN_WID -1 :0] fft_cal_re1_out, fft_cal_im1_out;
 reg signed  [`DATA_WID + `WN_WID -1 :0] fft_cal_re2_out, fft_cal_im2_out;
@@ -56,9 +56,9 @@ always @(*) begin
     fft_cal_im2_out = (fft_im1_enl << `ACC_LEN) - (fft_re2_enl*fft_wn_im_i + fft_im2_enl*fft_wn_re_i);
 end
 
-assign fft_data_re1_o = fft_cal_re1_out >> `ACC_LEN;
-assign fft_data_im1_o = fft_cal_im1_out >> `ACC_LEN;
-assign fft_data_re2_o = fft_cal_re2_out >> `ACC_LEN;
-assign fft_data_im2_o = fft_cal_im2_out >> `ACC_LEN;
+assign fft_data_re1_o = (fft_cal_re1_out >> `ACC_LEN) + fft_cal_re1_out[`ACC_LEN -1];
+assign fft_data_im1_o = (fft_cal_im1_out >> `ACC_LEN) + fft_cal_im1_out[`ACC_LEN -1];
+assign fft_data_re2_o = (fft_cal_re2_out >> `ACC_LEN) + fft_cal_re2_out[`ACC_LEN -1];
+assign fft_data_im2_o = (fft_cal_im2_out >> `ACC_LEN) + fft_cal_im2_out[`ACC_LEN -1];
 
 endmodule
