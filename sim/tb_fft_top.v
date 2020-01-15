@@ -155,7 +155,7 @@ begin
     fp_dump = $fopen(`DMP_FFT_TMP,"w");
     while (1) begin
         @(posedge clk);
-        $fdisplay( fp_dump, "%d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di",
+        $fdisplay( fp_dump, "%d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di, %d+%di",
                    fft_re_tmp_mem[ 0], fft_im_tmp_mem[ 0], fft_re_tmp_mem[ 1], fft_im_tmp_mem[ 1], 
                    fft_re_tmp_mem[ 2], fft_im_tmp_mem[ 2], fft_re_tmp_mem[ 3], fft_im_tmp_mem[ 3], 
                    fft_re_tmp_mem[ 4], fft_im_tmp_mem[ 4], fft_re_tmp_mem[ 5], fft_im_tmp_mem[ 5], 
@@ -171,7 +171,23 @@ begin
                    fft_re_tmp_mem[24], fft_im_tmp_mem[24], fft_re_tmp_mem[25], fft_im_tmp_mem[25], 
                    fft_re_tmp_mem[26], fft_im_tmp_mem[26], fft_re_tmp_mem[27], fft_im_tmp_mem[27], 
                    fft_re_tmp_mem[28], fft_im_tmp_mem[28], fft_re_tmp_mem[29], fft_im_tmp_mem[29], 
-                   fft_re_tmp_mem[30], fft_im_tmp_mem[30], fft_re_tmp_mem[31], fft_im_tmp_mem[31]  );
+                   fft_re_tmp_mem[30], fft_im_tmp_mem[30], fft_re_tmp_mem[31], fft_im_tmp_mem[31], 
+                   fft_re_tmp_mem[32], fft_im_tmp_mem[32], fft_re_tmp_mem[33], fft_im_tmp_mem[33], 
+                   fft_re_tmp_mem[34], fft_im_tmp_mem[34], fft_re_tmp_mem[35], fft_im_tmp_mem[35], 
+                   fft_re_tmp_mem[36], fft_im_tmp_mem[36], fft_re_tmp_mem[37], fft_im_tmp_mem[37], 
+                   fft_re_tmp_mem[38], fft_im_tmp_mem[38], fft_re_tmp_mem[39], fft_im_tmp_mem[39],
+                   fft_re_tmp_mem[40], fft_im_tmp_mem[40], fft_re_tmp_mem[41], fft_im_tmp_mem[41], 
+                   fft_re_tmp_mem[42], fft_im_tmp_mem[42], fft_re_tmp_mem[43], fft_im_tmp_mem[43], 
+                   fft_re_tmp_mem[44], fft_im_tmp_mem[44], fft_re_tmp_mem[45], fft_im_tmp_mem[45], 
+                   fft_re_tmp_mem[46], fft_im_tmp_mem[46], fft_re_tmp_mem[47], fft_im_tmp_mem[47],
+                   fft_re_tmp_mem[48], fft_im_tmp_mem[48], fft_re_tmp_mem[49], fft_im_tmp_mem[49], 
+                   fft_re_tmp_mem[50], fft_im_tmp_mem[50], fft_re_tmp_mem[51], fft_im_tmp_mem[51], 
+                   fft_re_tmp_mem[52], fft_im_tmp_mem[52], fft_re_tmp_mem[53], fft_im_tmp_mem[53], 
+                   fft_re_tmp_mem[54], fft_im_tmp_mem[54], fft_re_tmp_mem[55], fft_im_tmp_mem[55],
+                   fft_re_tmp_mem[56], fft_im_tmp_mem[56], fft_re_tmp_mem[57], fft_im_tmp_mem[57], 
+                   fft_re_tmp_mem[58], fft_im_tmp_mem[58], fft_re_tmp_mem[59], fft_im_tmp_mem[59], 
+                   fft_re_tmp_mem[60], fft_im_tmp_mem[60], fft_re_tmp_mem[61], fft_im_tmp_mem[61], 
+                   fft_re_tmp_mem[62], fft_im_tmp_mem[62], fft_re_tmp_mem[63], fft_im_tmp_mem[63] );
     end
 end
 endtask
@@ -185,7 +201,7 @@ begin
     while (1) begin
         @(posedge clk)
         if(fft_done)begin
-            $fdisplay( fp_dump, "%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di",
+            $fdisplay( fp_dump, "%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di\n%d+%di",
                        fft_re_o_mem[ 0], fft_im_o_mem[ 0], fft_re_o_mem[ 1], fft_im_o_mem[ 1], 
                        fft_re_o_mem[ 2], fft_im_o_mem[ 2], fft_re_o_mem[ 3], fft_im_o_mem[ 3], 
                        fft_re_o_mem[ 4], fft_im_o_mem[ 4], fft_re_o_mem[ 5], fft_im_o_mem[ 5], 
@@ -201,7 +217,23 @@ begin
                        fft_re_o_mem[24], fft_im_o_mem[24], fft_re_o_mem[25], fft_im_o_mem[25], 
                        fft_re_o_mem[26], fft_im_o_mem[26], fft_re_o_mem[27], fft_im_o_mem[27],
                        fft_re_o_mem[28], fft_im_o_mem[28], fft_re_o_mem[29], fft_im_o_mem[29], 
-                       fft_re_o_mem[30], fft_im_o_mem[30], fft_re_o_mem[31], fft_im_o_mem[31] );
+                       fft_re_o_mem[30], fft_im_o_mem[30], fft_re_o_mem[31], fft_im_o_mem[31],
+                       fft_re_o_mem[32], fft_im_o_mem[32], fft_re_o_mem[33], fft_im_o_mem[33], 
+                       fft_re_o_mem[34], fft_im_o_mem[34], fft_re_o_mem[35], fft_im_o_mem[35], 
+                       fft_re_o_mem[36], fft_im_o_mem[36], fft_re_o_mem[37], fft_im_o_mem[37], 
+                       fft_re_o_mem[38], fft_im_o_mem[38], fft_re_o_mem[39], fft_im_o_mem[39],
+                       fft_re_o_mem[40], fft_im_o_mem[40], fft_re_o_mem[41], fft_im_o_mem[41], 
+                       fft_re_o_mem[42], fft_im_o_mem[42], fft_re_o_mem[43], fft_im_o_mem[43], 
+                       fft_re_o_mem[44], fft_im_o_mem[44], fft_re_o_mem[45], fft_im_o_mem[45], 
+                       fft_re_o_mem[46], fft_im_o_mem[46], fft_re_o_mem[47], fft_im_o_mem[47],
+                       fft_re_o_mem[48], fft_im_o_mem[48], fft_re_o_mem[49], fft_im_o_mem[49], 
+                       fft_re_o_mem[50], fft_im_o_mem[50], fft_re_o_mem[51], fft_im_o_mem[51], 
+                       fft_re_o_mem[52], fft_im_o_mem[52], fft_re_o_mem[53], fft_im_o_mem[53],
+                       fft_re_o_mem[54], fft_im_o_mem[54], fft_re_o_mem[55], fft_im_o_mem[55], 
+                       fft_re_o_mem[56], fft_im_o_mem[56], fft_re_o_mem[57], fft_im_o_mem[57], 
+                       fft_re_o_mem[58], fft_im_o_mem[58], fft_re_o_mem[59], fft_im_o_mem[59],
+                       fft_re_o_mem[60], fft_im_o_mem[60], fft_re_o_mem[61], fft_im_o_mem[61], 
+                       fft_re_o_mem[62], fft_im_o_mem[62], fft_re_o_mem[63], fft_im_o_mem[63] );
     
         end
     end

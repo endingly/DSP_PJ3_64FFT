@@ -69,7 +69,7 @@ always @ (posedge clk or negedge rst_n) begin
                 fft_i_cnt <= 'd0;
                 get_data_re_buf[fft_i_cnt] <= fft_data_re_i;
                 get_data_im_buf[fft_i_cnt] <= fft_data_im_i;
-                /*
+                
                 in_data_re_buf <= { fft_data_re_i      , get_data_re_buf[62], get_data_re_buf[61], get_data_re_buf[60],
                                     get_data_re_buf[59], get_data_re_buf[58], get_data_re_buf[57], get_data_re_buf[56],
                                     get_data_re_buf[55], get_data_re_buf[54], get_data_re_buf[53], get_data_re_buf[52],
@@ -103,8 +103,8 @@ always @ (posedge clk or negedge rst_n) begin
                                     get_data_im_buf[11], get_data_im_buf[10], get_data_im_buf[ 9], get_data_im_buf[ 8],
                                     get_data_im_buf[ 7], get_data_im_buf[ 6], get_data_im_buf[ 5], get_data_im_buf[ 4],
                                     get_data_im_buf[ 3], get_data_im_buf[ 2], get_data_im_buf[ 1], get_data_im_buf[ 0] };
-                */
                 
+                /*
                 in_data_re_buf <= { fft_data_re_i      , get_data_re_buf[30], get_data_re_buf[29], get_data_re_buf[28],
                                     get_data_re_buf[27], get_data_re_buf[26], get_data_re_buf[25], get_data_re_buf[24],
                                     get_data_re_buf[23], get_data_re_buf[22], get_data_re_buf[21], get_data_re_buf[20],
@@ -122,6 +122,7 @@ always @ (posedge clk or negedge rst_n) begin
                                     get_data_im_buf[11], get_data_im_buf[10], get_data_im_buf[ 9], get_data_im_buf[ 8],
                                     get_data_im_buf[ 7], get_data_im_buf[ 6], get_data_im_buf[ 5], get_data_im_buf[ 4],
                                     get_data_im_buf[ 3], get_data_im_buf[ 2], get_data_im_buf[ 1], get_data_im_buf[ 0] };
+                */
                 /*
                 in_data_re_buf <= { fft_data_re_i      , get_data_re_buf[14], get_data_re_buf[13], get_data_re_buf[12],
                                     get_data_re_buf[11], get_data_re_buf[10], get_data_re_buf[ 9], get_data_re_buf[ 8],
@@ -166,6 +167,7 @@ always @(posedge clk or negedge rst_n) begin
     end
 end
 
+// output parallel to serial
 generate
 genvar i;
     for (i = 0; i<`FFT_LEN; i = i+1) begin:serial_dmp
@@ -188,7 +190,6 @@ genvar i;
     end
 endgenerate
 
-// output parallel to serial
 always @(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
         fft_o_cnt <= 'd0;
